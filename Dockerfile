@@ -1,5 +1,5 @@
 FROM debian:bookworm-slim
-EXPOSE 40000/tcp
+EXPOSE 1080/tcp
 RUN apt-get update && \
   apt-get install curl gpg socat -y && \
   curl https://pkg.cloudflareclient.com/pubkey.gpg | \
