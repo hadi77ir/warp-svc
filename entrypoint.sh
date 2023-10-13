@@ -10,14 +10,14 @@ ln -s /dev/null cfwarp_service_stats.txt
 cd /
 warp-svc | grep -v DEBUG &
 sleep 2
-warp-cli --accept-tos register
+
+while ! [ -f "/var/lib/cloudflare-warp/conf.json" ]; do
+echo "ENTRYPOINT: Waiting for WARP registration"
+sleep 1
+done
+
 warp-cli --accept-tos set-proxy-port 40000
 warp-cli --accept-tos set-mode proxy
-warp-cli --accept-tos disable-dns-log
-warp-cli --accept-tos set-families-mode "${FAMILIES_MODE}"
-if [[ -n $WARP_LICENSE ]]; then
-  warp-cli --accept-tos set-license "${WARP_LICENSE}"
-fi
 warp-cli --accept-tos connect
 socat tcp-listen:1080,reuseaddr,fork tcp:localhost:40000 &
 fg %1
